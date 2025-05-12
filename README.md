@@ -54,12 +54,12 @@ For more complex queries, the system will transfer the request to a human adviso
 
 ## **Tech Stack**
 
-- **Speech-to-Text**: Google Cloud Speech-to-Text or AWS Transcribe
+- **Speech-to-Text**: AWS Transcribe
 - **Generative AI**: OpenAI GPT-4 API
-- **API Management**: Flask/Django
-- **Search & Retrieval**: FAISS, Pinecone, or Elasticsearch
-- **Data Processing & Analytics**: LangChain, Haystack, PostgreSQL, MongoDB
-- **Monitoring**: Grafana, Kibana
+- **API Management**: Flask
+- **Search & Retrieval**: Pinecone 
+- **Data Processing & Analytics**: LangChain (for RAG)
+- **Monitoring**: Prometheus (for logs), Grafana
 
 ## **Setup Instructions**
 
@@ -107,68 +107,6 @@ You can test the system by sending a POST request with a donor query:
 curl -X POST http://127.0.0.1:5000/handle_request     -H "Content-Type: application/json"     -d '{"query": "I would like to increase my monthly donation."}'
 ```
 
-## **Code Examples**
-
-### **1. Speech-to-Text Integration**
-
-```python
-from google.cloud import speech_v1p1beta1 as speech
-
-def transcribe_audio(audio_file_path):
-    client = speech.SpeechClient()
-    with open(audio_file_path, "rb") as audio_file:
-        content = audio_file.read()
-
-    audio = speech.RecognitionAudio(content=content)
-    config = speech.RecognitionConfig(
-        encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-        sample_rate_hertz=16000,
-        language_code="fr-FR",
-    )
-
-    response = client.recognize(config=config, audio=audio)
-
-    for result in response.results:
-        print("Transcript: {}".format(result.alternatives[0].transcript))
-```
-
-### **2. Query Handling with GPT-4**
-
-```python
-import openai
-
-openai.api_key = "your_openai_api_key"
-
-def generate_response(query):
-    response = openai.Completion.create(
-        engine="gpt-4",
-        prompt=query,
-        max_tokens=150
-    )
-    return response.choices[0].text.strip()
-```
-
-### **3. Flask API for Query Management**
-
-```python
-from flask import Flask, request, jsonify
-
-app = Flask(__name__)
-
-@app.route('/handle_request', methods=['POST'])
-def handle_request():
-    data = request.json
-    user_query = data.get("query")
-    response = generate_response(user_query)
-
-    if "complex" in response:
-        return jsonify({"response": "This request will be transferred to an advisor."})
-    else:
-        return jsonify({"response": response})
-
-if __name__ == '__main__':
-    app.run(debug=True)
-```
 
 ## **Contributing**
 
