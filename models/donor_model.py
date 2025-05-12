@@ -58,3 +58,21 @@ class Donor:
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://username:password@localhost:5432/your_database_name'
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # db = SQLAlchemy(app)
+
+
+# 3. Donor Model Use Cases
+# In your application, you would typically interact with the Donor model for tasks like:
+
+# Storing donor data when they sign up or make a donation.
+
+# Tracking donation history and updating donation amounts.
+
+# Suspending or resuming donations based on donor preferences (e.g., suspending donations during a temporary pause or resuming them).
+
+# Querying donor information based on email or other fields to personalize responses or manage donor relationships.
+
+# 4. Interactions with Other Services
+# Speech-to-Text: Once the donor’s request is transcribed using AWS Transcribe, you could extract relevant donor information (such as their name or donation preferences) and update the Donor model accordingly.
+
+# GPT-4 Query Handling: When the AI model responds to the donor's query, you can use the Donor model to fetch the donor’s history, status, or preferences to provide personalized responses.
+
