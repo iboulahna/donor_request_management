@@ -1,54 +1,62 @@
-# from flask_pymongo import PyMongo
+# from flask_sqlalchemy import SQLAlchemy
 
-# mongo = PyMongo()
+# db = SQLAlchemy()
 
-# class Donor:
-#     def __init__(self, first_name, last_name, email, phone_number=None, total_donations=0.0, monthly_donations=0.0, status="active"):
-#         self.first_name = first_name
-#         self.last_name = last_name
-#         self.email = email
-#         self.phone_number = phone_number
-#         self.total_donations = total_donations
-#         self.monthly_donations = monthly_donations
-#         self.status = status
+# class Donor(db.Model):
+#     __tablename__ = 'donors'
 
-#     def save(self):
-#         """Method to save the donor to the database."""
-#         donor_data = {
-#             "first_name": self.first_name,
-#             "last_name": self.last_name,
-#             "email": self.email,
-#             "phone_number": self.phone_number,
-#             "total_donations": self.total_donations,
-#             "monthly_donations": self.monthly_donations,
-#             "status": self.status
+#     id = db.Column(db.Integer, primary_key=True)  # Primary key (auto-increment)
+#     first_name = db.Column(db.String(100), nullable=False)
+#     last_name = db.Column(db.String(100), nullable=False)
+#     email = db.Column(db.String(100), unique=True, nullable=False)
+#     phone_number = db.Column(db.String(20))
+#     monthly_donation = db.Column(db.Float, nullable=False, default=0.0)  # Default value for donations
+#     donation_status = db.Column(db.String(50), default="active")  # Status of the donation (e.g., "active", "paused", "cancelled")
+#     created_at = db.Column(db.DateTime, server_default=db.func.now())  # Timestamp of when the donor was added
+#     updated_at = db.Column(db.DateTime, server_default=db.func.now(), onupdate=db.func.now())  # Timestamp for updates
+
+#     def __repr__(self):
+#         return f"<Donor {self.first_name} {self.last_name}>"
+
+#     def to_dict(self):
+#         """ Convert Donor object to dictionary format for easy JSON serialization """
+#         return {
+#             'id': self.id,
+#             'first_name': self.first_name,
+#             'last_name': self.last_name,
+#             'email': self.email,
+#             'phone_number': self.phone_number,
+#             'monthly_donation': self.monthly_donation,
+#             'donation_status': self.donation_status,
+#             'created_at': self.created_at,
+#             'updated_at': self.updated_at
 #         }
-#         mongo.db.donors.insert_one(donor_data)
 
 #     @classmethod
 #     def find_by_email(cls, email):
-#         """Method to find a donor by email."""
-#         donor_data = mongo.db.donors.find_one({"email": email})
-#         if donor_data:
-#             return cls(**donor_data)
-#         return None
+#         """ Find a donor by their email address """
+#         return cls.query.filter_by(email=email).first()
 
-#     def update_donations(self, donation_amount):
-#         """Update total and monthly donations."""
-#         self.total_donations += donation_amount
-#         self.monthly_donations = donation_amount
-#         mongo.db.donors.update_one({"email": self.email}, {"$set": {"total_donations": self.total_donations, "monthly_donations": self.monthly_donations}})
+#     @classmethod
+#     def find_by_id(cls, donor_id):
+#         """ Find a donor by their ID """
+#         return cls.query.get(donor_id)
 
-#     def suspend_donations(self):
-#         """Suspend the donor's monthly donations."""
-#         self.status = "suspended"
-#         mongo.db.donors.update_one({"email": self.email}, {"$set": {"status": self.status}})
+#     def save(self):
+#         """ Save the donor to the database """
+#         db.session.add(self)
+#         db.session.commit()
 
-#     def resume_donations(self):
-#         """Resume the donor's donations."""
-#         self.status = "active"
-#         mongo.db.donors.update_one({"email": self.email}, {"$set": {"status": self.status}})
+#     def update(self, **kwargs):
+#         """ Update donor attributes """
+#         for key, value in kwargs.items():
+#             setattr(self, key, value)
+#         db.session.commit()
 
+#     def delete(self):
+#         """ Delete the donor from the database """
+#         db.session.delete(self)
+#         db.session.commit()
 
 
 from mongoengine import Document, StringField, FloatField, DateTimeField, EnumField, EmailField
