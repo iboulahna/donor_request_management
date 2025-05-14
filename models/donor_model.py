@@ -49,46 +49,7 @@
 #         self.status = "active"
 #         mongo.db.donors.update_one({"email": self.email}, {"$set": {"status": self.status}})
 
-# from mongoengine import Document, StringField, FloatField, DateTimeField, EnumField, EmailField
-# import datetime
 
-# class Donor(Document):
-#     first_name = StringField(required=True, max_length=100)
-#     last_name = StringField(required=True, max_length=100)
-#     email = EmailField(unique=True, required=True)
-#     phone_number = StringField(max_length=20)
-#     monthly_donation = FloatField(required=True, default=0.0)
-#     donation_status = EnumField(choices=["active", "paused", "cancelled"], default="active")
-#     created_at = DateTimeField(default=datetime.datetime.utcnow)
-#     updated_at = DateTimeField(default=datetime.datetime.utcnow)
-
-#     def to_dict(self):
-#         """ Convert Donor object to dictionary format for easy JSON serialization """
-#         return {
-#             'id': str(self.id),  # MongoDB uses ObjectId, convert to string
-#             'first_name': self.first_name,
-#             'last_name': self.last_name,
-#             'email': self.email,
-#             'phone_number': self.phone_number,
-#             'monthly_donation': self.monthly_donation,
-#             'donation_status': self.donation_status,
-#             'created_at': self.created_at,
-#             'updated_at': self.updated_at
-#         }
-
-#     def save(self):
-#         """ Save the donor to the database """
-#         self.save()
-
-#     def update(self, **kwargs):
-#         """ Update donor attributes """
-#         for key, value in kwargs.items():
-#             setattr(self, key, value)
-#         self.save()
-
-#     def delete(self):
-#         """ Delete the donor from the database """
-#         self.delete()
 
 from mongoengine import Document, StringField, FloatField, DateTimeField, EnumField, EmailField
 import datetime
