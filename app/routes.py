@@ -2,8 +2,31 @@
 
 
 from flask import Flask, request, jsonify
+from app.models.donor_model import Donor
 
 app = Flask(__name__)
+
+
+@app.route('/add_donor', methods=['POST'])
+def add_donor():
+    data = request.json
+    donor = Donor(
+        first_name=data['first_name'],
+        last_name=data['last_name'],
+        email=data['email'],
+        phone_number=data.get('phone_number'),
+        monthly_donation=data['monthly_donation'],
+    )
+    donor.save()
+    return jsonify(donor.to_dict()), 201
+
+@app.route('/donor/<email>', methods=['GET'])
+def get_donor_by_email(email):
+    donor = Donor.find_by_email(email)
+    if donor:
+        return jsonify(donor.to_dict())
+    return jsonify({"message": "Donor not found"}), 404
+
 
 @app.route('/handle_request', methods=['POST'])
 def handle_request():
@@ -18,3 +41,4 @@ def handle_request():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
