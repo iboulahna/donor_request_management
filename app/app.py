@@ -17,18 +17,21 @@ def handle_request():
     response = augment_response(query)
     return jsonify({"response": response})
 
-from flask_migrate import Migrate
-from app.models.donor_model import db
+# 5. Database Migration (if using SQLAlchemy)
+# If you’re using SQLAlchemy with a relational database like PostgreSQL, you can use Flask-Migrate to handle database migrations.
 
-# pip install Flask-Migrate
+# from flask_migrate import Migrate
+# from app.models.donor_model import db
 
-app = Flask(__name__)
-app.config.from_object(Config)
+# # pip install Flask-Migrate
 
-db.init_app(app)
-migrate = Migrate(app, db)
+# app = Flask(__name__)
+# app.config.from_object(Config)
+
+# db.init_app(app)
+# migrate = Migrate(app, db)
 
 
-# flask db init
-# flask db migrate -m "Create donor table"
-# flask db upgrade
+# # flask db init
+# # flask db migrate -m "Create donor table"
+# # flask db upgrade
